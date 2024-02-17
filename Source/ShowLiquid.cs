@@ -147,6 +147,9 @@ namespace ShowLiquidOnAirflowTiles
     [HarmonyPatch(typeof(SolarPanelConfig))]
     public class SolarPanelConfig_Patch
     {
+        [HarmonyPrepare]
+        public static bool Prepare() => Options.Instance.SolidSolarPanelsFoundation;
+
         [HarmonyPostfix]
         [HarmonyPatch(nameof(DoPostConfigureComplete))]
         public static void DoPostConfigureComplete(GameObject go)
