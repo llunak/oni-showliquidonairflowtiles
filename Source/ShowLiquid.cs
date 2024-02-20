@@ -64,13 +64,14 @@ namespace ShowLiquidOnAirflowTiles
             if( activate == active )
                 return;
             active = activate;
-            simCellOccupier.doReplaceElement = active;
             // Changing SimCellOccupier's doReplaceElement would be enough, but the effect
-            // is applied only in its OnSpawn() and undone DestroySelf() that's called only from OnCleanUp(),
+            // is applied only in its OnSpawn() and undone in DestroySelf() that's called only from OnCleanUp(),
             // so call those.
             simCellOccupier.DestroySelf( null );
             // Undo the only unwanted effect of DestroySelf().
             callDestroyAccess( simCellOccupier ) = true;
+            // Change the setting after destroying and before recreating.
+            simCellOccupier.doReplaceElement = active;
             // Block unwanted side effects of OnSpawn().
             onSpawnHack = true;
             onSpawnDelegate( simCellOccupier );
