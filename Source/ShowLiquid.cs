@@ -13,6 +13,7 @@ namespace ShowLiquidOnAirflowTiles
     // a normal tile (and since there is liquid, gas cannot really pass through the tile anyway,
     // as least it shouldn't in any meaningful direction).
     // This is obviously a hack, but it seems to work well enough.
+    [SkipSaveFileSerialization]
     [HarmonyPatch]
     public class AirflowTileLiquidChecker : KMonoBehaviour
     {
@@ -76,6 +77,10 @@ namespace ShowLiquidOnAirflowTiles
             onSpawnHack = true;
             onSpawnDelegate( simCellOccupier );
             onSpawnHack = false;
+            // The tile for some reason does not end up as solid when loading a save with a tile that has liquid on it.
+            // Explicitly set that.
+            if( active && !Grid.Solid[ cell ] )
+                Grid.SetSolid( cell, solid: true, CellEventLogger.Instance.SimCellOccupierDestroy );
         }
 
         private bool CheckCell( int checkCell )
